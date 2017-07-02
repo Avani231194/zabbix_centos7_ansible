@@ -1,27 +1,27 @@
 ---
-#- name: Ensure deltarpm installed (before updating CentOS packages)
-#  yum: name=deltarpm state=latest
+- name: Ensure deltarpm installed (before updating CentOS packages)
+  yum: name=deltarpm state=latest
 
-#- name: Update CentOS packages
-#  yum: name=* state=latest update_cache=yes
+- name: Update CentOS packages
+  yum: name=* state=latest update_cache=yes
 
-#- name: Ensure EPEL installed
-#  yum: name=epel-release state=latest
+- name: Ensure EPEL installed
+  yum: name=epel-release state=latest
 
-#- name: Installing zabbix repo
-#  command: rpm -ivh http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el7.noarch.rpm
+- name: Installing zabbix repo
+  command: rpm -ivh http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el7.noarch.rpm
 
 - name: Installing zabbix dependencies and relative packages
   yum: name={{ item }}  state=present
   with_items:
-#      - zabbix-server-mysql
-#      - zabbix-web-mysql
-#      - zabbix-agent
-#      - mysql 
-#      - mariadb-server 
-#      - httpd 
-#      - php
-       - MySQL-python
+      - zabbix-server-mysql
+      - zabbix-web-mysql
+      - zabbix-agent
+      - mysql 
+      - mariadb-server 
+      - httpd 
+      - php
+      - MySQL-python
 
 - name: Starting mariadb  database
   service: name=mariadb state=started
@@ -33,10 +33,6 @@
 
 - name: Configuring mysql
   include: mysql_secure_installation.yml
-
-
-#- name: Installing zabbix server rpm package
-#  command: rpm -Uvh http://repo.zabbix.com/zabbix/3.0/rhel/6/x86_64/zabbix-release-3.*.el6.noarch.rpm warn=no
 
 - name: Configuring php setting ...
   template: src=zabbix.conf.j2 dest=/etc/httpd/conf.d/zabbix.conf owner=root group=root mode=0644
@@ -61,8 +57,6 @@
 
 - name: Starting zabbix server
   service: name=zabbix-server state=started
-
-
 
 - include: zabbix_agent.yml
 
